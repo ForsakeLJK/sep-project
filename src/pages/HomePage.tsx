@@ -1,5 +1,4 @@
 import AdbIcon from '@mui/icons-material/Adb';
-import MailIcon from '@mui/icons-material/Mail';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -13,28 +12,54 @@ import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import React, { useEffect, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { fetchData } from '../apiService';
+import { useAuth } from '../AuthContext';
 
 const drawerWidth = 240;
 
 
 const HomePage: React.FC = () => {
-    const [myData, setMyData] = useState(null);
 
-    useEffect(
-        () => {
-            const fetchMyData = async () => {
-                try {
-                    const response = await fetchData('home');
-                    setMyData(response.result);
-                } catch (error) {
-                    console.error('Error fetching my data:', error);
-                }
-            };
+    const [content, setContent] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-            fetchMyData();
-        }, []
-    )
+    const { userRole, logname } = useAuth();
+
+    const navigate = useNavigate();
+
+    const renderButtons = () => {
+        return (
+            <List>
+                <ListItem disablePadding>
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <InboxIcon />
+                        </ListItemIcon>
+                        <ListItemText primary='app' />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        );
+    };
+
+    // useEffect(
+    //     () => {
+    //         const fetchMyData = async () => {
+    //             try {
+    //                 const response = await fetchData('home');
+    //             } catch (error) {
+    //                 console.error('Error fetching my data:', error);
+    //             }
+    //         };
+
+    //         fetchMyData();
+    //     }, []
+    // )
+
+    if (!userRole) {
+        return <Navigate to="/login" />;
+    }
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -70,24 +95,16 @@ const HomePage: React.FC = () => {
             >
                 <Toolbar />
                 <Box sx={{ overflow: 'auto' }}>
-                    <List>
-                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
+                    {renderButtons()}
                 </Box>
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <Toolbar />
                 <Typography sx={{ marginBottom: 2 }}>
-                    <h1>Hello from menu</h1>
+                    <h1>Hello {logname}! </h1>
+                </Typography>
+                <Typography sx={{ marginBottom: 2 }}>
+                    <h3>you can access different functionalities from the menu on the left-side</h3>
                 </Typography>
             </Box>
         </Box>

@@ -2,16 +2,21 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
+import { AuthProvider } from './AuthContext';
+import LoginPage from './pages/LoginPage';
 
 function App() {
   return (
     <div className="App">
-      <Router>
-        <Routes>
-          <Route path="/home" element={<HomePage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </div>
   );
 }
