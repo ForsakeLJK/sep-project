@@ -15,47 +15,167 @@ import React, { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { fetchData } from '../apiService';
 import { useAuth } from '../AuthContext';
+import ContentCS from '../components/ContentCS';
+
+interface Content {
+    data?: Record<string, any>;
+    error?: string;
+}
 
 const drawerWidth = 240;
 
-
 const HomePage: React.FC = () => {
 
-    const [content, setContent] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [content, setContent] = useState<Content | null>(null);
 
     const { userRole, logname } = useAuth();
 
-    const navigate = useNavigate();
+    const renderContent = () => {
+        if (content?.error) {
+            return <Typography>{content.error}</Typography>;
+        }
 
-    const renderButtons = () => {
-        return (
-            <List>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <InboxIcon />
-                        </ListItemIcon>
-                        <ListItemText primary='app' />
-                    </ListItemButton>
-                </ListItem>
-            </List>
-        );
+        if (!content) {
+            return (
+                <div>
+                    <Typography><h1>Hello {logname}!</h1></Typography>
+                    <Typography><h3>you can use the menu on the left-side for further information</h3></Typography>
+                </div>
+            );
+        }
+
+        switch (userRole) {
+            case 'CS':
+                return <ContentCS data={content.data} />;
+            default:
+                return null;
+        }
     };
 
-    // useEffect(
-    //     () => {
-    //         const fetchMyData = async () => {
-    //             try {
-    //                 const response = await fetchData('home');
-    //             } catch (error) {
-    //                 console.error('Error fetching my data:', error);
-    //             }
-    //         };
+    const handleButtonClick = async () => {
+        switch (userRole) {
+            case 'CS':
+                setContent({ data: { title: 'test_title', description: 'test_desc' } });
+                return;
+            case 'AM':
+            case 'SCS':
+            case 'PM':
+            case 'FM':
+            case 'HR':
+                return;
+        }
+        // try {
+        //     const data = await fetchData(endpoint);
+        //     setContent({ data: data, contentType: contentType });
+        // } catch (error) {
+        //     setContent({ error: 'Error fetching data' });
+        // }
+    };
 
-    //         fetchMyData();
-    //     }, []
-    // )
+    const renderButtons = () => {
+        switch (userRole) {
+            case 'CS':
+                return (
+                    <List>
+                        <ListItem disablePadding>
+                            <ListItemButton onClick={() => handleButtonClick()}>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                </ListItemIcon>
+                                <ListItemText primary='applications' />
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
+                );
+            case 'AM':
+            case 'SCS':
+                return (
+                    <List>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                </ListItemIcon>
+                                <ListItemText primary='applications' />
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
+                );
+            case 'PM':
+                return (
+                    <List>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                </ListItemIcon>
+                                <ListItemText primary='applications' />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                </ListItemIcon>
+                                <ListItemText primary='resource requests' />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                </ListItemIcon>
+                                <ListItemText primary='budget requests' />
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
+                );
+            case 'FM':
+                return (
+                    <List>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                </ListItemIcon>
+                                <ListItemText primary='applications' />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                </ListItemIcon>
+                                <ListItemText primary='budget requests' />
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
+                );
+            case 'HR':
+                return (
+                    <List>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                </ListItemIcon>
+                                <ListItemText primary='resource requests' />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                </ListItemIcon>
+                                <ListItemText primary='job posts' />
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
+                );
+            default:
+                return <Typography>No access</Typography>;
+        }
+    };
 
     if (!userRole) {
         return <Navigate to="/login" />;
@@ -100,12 +220,7 @@ const HomePage: React.FC = () => {
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <Toolbar />
-                <Typography sx={{ marginBottom: 2 }}>
-                    <h1>Hello {logname}! </h1>
-                </Typography>
-                <Typography sx={{ marginBottom: 2 }}>
-                    <h3>you can access different functionalities from the menu on the left-side</h3>
-                </Typography>
+                {renderContent()}
             </Box>
         </Box>
     );
