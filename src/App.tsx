@@ -1,11 +1,17 @@
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
-import ResponsiveAppBar from './AppBar';
+import HomePage from './pages/HomePage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (
     <div className="App">
-      <ResponsiveAppBar />
-      <p>Welcome Page Here</p>
+      <Router>
+        <Routes>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Router>
     </div>
   );
 }

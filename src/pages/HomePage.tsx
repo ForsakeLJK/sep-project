@@ -1,5 +1,5 @@
 import React from 'react';
-import ResponsiveAppBar from '../AppBar';
+import ResponsiveAppBar from '../components/AppBar';
 
 const HomePage: React.FC = () => {
     return (
