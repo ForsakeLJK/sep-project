@@ -89,7 +89,7 @@ const ContentFM: React.FC<ContentFMProps> = ({ btn_type, user_name }) => {
                     <Card key={app.applicationId} style={{ margin: '10px 0' }}>
                         <CardContent>
                             <Typography variant="h5">{app.eventName}</Typography>
-                            <Typography color="textSecondary">{app.applicationId}</Typography>
+                            <Typography color="textSecondary">Application ID: {app.applicationId}</Typography>
                             <Typography variant="body2" color="textSecondary">
                                 Status: {app.eventStatus}
                             </Typography>
