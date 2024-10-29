@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Card, CardContent, Button, Snackbar, Alert, Popover, TextField, MenuItem, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import { fetchDataByButtonType, fetchEmpData, postData } from '../apiService';
+import { fetchDataByButtonType, fetchDataWithAppId, postData } from '../apiService';
 
 interface ApplicationVO {
     applicationId: string;
@@ -59,7 +59,7 @@ const ContentPM: React.FC<ContentPMProps> = ({ btn_type, user_name }) => {
 
     const handleAssignTaskOpen = async (event: React.MouseEvent<HTMLButtonElement>, applicationId: string) => {
         setAnchorEl(event.currentTarget);
-        const response = await fetchEmpData('employee', user_name, applicationId);
+        const response = await fetchDataWithAppId('employee', user_name, applicationId);
         setEmployees(response.empList || []);
         setCurrentApplicationId(applicationId);
     };
@@ -95,7 +95,7 @@ const ContentPM: React.FC<ContentPMProps> = ({ btn_type, user_name }) => {
     };
 
     const handleViewTasksOpen = async (applicationId: string) => {
-        const response = await postData('/taskList', { applicationId, username: user_name });
+        const response = await fetchDataWithAppId('taskList', user_name, applicationId);
         setTasks(response.taskList || []);
         setTaskPopoverOpen(true);
     };

@@ -16,7 +16,7 @@ export const fetchDataByButtonType = async (btnType: string | null, username: st
     return fetchData(endpoint, username);
 };
 
-export const fetchEmpData = async (endpoint: string, username: string | null, applicationId: string): Promise<any> => {
+export const fetchDataWithAppId = async (endpoint: string, username: string | null, applicationId: string): Promise<any> => {
     try {
         if (!username) {
             throw new Error('null username');
