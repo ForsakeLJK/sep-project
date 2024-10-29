@@ -22,6 +22,7 @@ import ContentSub from '../components/ContentSub';
 import ContentBudgetPM from '../components/ContentBudgetPM';
 import ContentBudgetFM from '../components/ContentBudgetFM';
 import ContentResourcePM from '../components/ContentResourcePM';
+import ContentResourceHR from '../components/ContentResourceHR';
 
 const drawerWidth = 240;
 
@@ -65,7 +66,7 @@ const HomePage: React.FC = () => {
                 }
                 return;
             case 'HR':
-                return;
+                return <ContentResourceHR btn_type={btnHit} user_name={logname} />;
             case 'Sub':
                 return <ContentSub btn_type={btnHit} user_name={logname} />;
         }
@@ -170,19 +171,11 @@ const HomePage: React.FC = () => {
                 return (
                     <List>
                         <ListItem disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={() => handleButtonClick('resource requests')}>
                                 <ListItemIcon>
                                     <InboxIcon />
                                 </ListItemIcon>
                                 <ListItemText primary='resource requests' />
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <InboxIcon />
-                                </ListItemIcon>
-                                <ListItemText primary='job posts' />
                             </ListItemButton>
                         </ListItem>
                     </List>
