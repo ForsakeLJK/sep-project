@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Card, CardContent, Button, Snackbar, Alert } from '@mui/material';
+import { Typography, Card, CardContent, Button, Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 import { fetchDataByButtonType, postData } from '../apiService';
 
 interface ApplicationVO {
@@ -13,16 +13,20 @@ interface ApplicationVO {
     financialComment: string;
 }
 
-interface ContentRevProps {
+interface ContentFMProps {
     btn_type: string | null;
     user_name: string | null;
 }
 
-const ContentRev: React.FC<ContentRevProps> = ({ btn_type, user_name }) => {
+const ContentFM: React.FC<ContentFMProps> = ({ btn_type, user_name }) => {
     const [applications, setApplications] = useState<ApplicationVO[]>([]);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [currentAppId, setCurrentAppId] = useState<string | null>(null);
+    const [comment, setComment] = useState('');
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -35,21 +39,40 @@ const ContentRev: React.FC<ContentRevProps> = ({ btn_type, user_name }) => {
         fetchData();
     }, [btn_type, user_name]);
 
-    const handleReview = async (applicationId: string, action: 'approve' | 'reject') => {
-        const response = await postData('reviewApplication', { applicationId, action, username: user_name });
+    const handleDialogOpen = (applicationId: string) => {
+        setCurrentAppId(applicationId);
+        setDialogOpen(true);
+    };
 
-        if (response.reviewSuccess) {
-            setSnackbarMessage(`Application ${action} successfully!`);
-            setSnackbarSeverity('success');
-            // Re-fetch data to update the list
-            const data = await fetchDataByButtonType(btn_type, user_name);
-            setApplications(data.applicationList || []);
-        } else {
-            setSnackbarMessage(`Failed to ${action} application. Please try again.`);
-            setSnackbarSeverity('error');
+    const handleDialogClose = () => {
+        setDialogOpen(false);
+        setCurrentAppId(null);
+        setComment('');
+    };
+
+    const handleCommentSubmit = async () => {
+        if (currentAppId && comment) {
+            const response = await postData('reviewApplication', {
+                applicationId: currentAppId,
+                action: 'comment',
+                username: user_name,
+                comment,
+            });
+
+            if (response.reviewSuccess) {
+                setSnackbarMessage('Comment submitted successfully!');
+                setSnackbarSeverity('success');
+                // Re-fetch data to update the list
+                const data = await fetchDataByButtonType(btn_type, user_name);
+                setApplications(data.applicationList || []);
+            } else {
+                setSnackbarMessage('Failed to submit comment. Please try again.');
+                setSnackbarSeverity('error');
+            }
+
+            setSnackbarOpen(true);
+            handleDialogClose();
         }
-
-        setSnackbarOpen(true);
     };
 
     const handleSnackbarClose = () => {
@@ -80,18 +103,12 @@ const ContentRev: React.FC<ContentRevProps> = ({ btn_type, user_name }) => {
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        onClick={() => handleReview(app.applicationId, 'approve')}
+                                        onClick={() => handleDialogOpen(app.applicationId)}
                                         style={{ marginRight: '10px' }}
                                     >
-                                        Approve
+                                        Comment
                                     </Button>
-                                    <Button
-                                        variant="contained"
-                                        color="secondary"
-                                        onClick={() => handleReview(app.applicationId, 'reject')}
-                                    >
-                                        Reject
-                                    </Button>
+
                                 </div>
                             )}
                         </CardContent>
@@ -103,8 +120,33 @@ const ContentRev: React.FC<ContentRevProps> = ({ btn_type, user_name }) => {
                     {snackbarMessage}
                 </Alert>
             </Snackbar>
+            <Dialog open={dialogOpen} onClose={handleDialogClose}>
+                <DialogTitle>Submit Comment</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Enter your comment for application ID: {currentAppId}
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        label="Comment"
+                        fullWidth
+                        variant="standard"
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDialogClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleCommentSubmit} color="primary">
+                        Submit
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };
 
-export default ContentRev;
+export default ContentFM;

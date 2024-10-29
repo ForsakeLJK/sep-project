@@ -10,6 +10,7 @@ interface ApplicationVO {
     needReview: boolean;
     showSetStatus: boolean;
     nextStatus: string;
+    financialComment: string;
 }
 
 interface ContentCSProps {
@@ -84,6 +85,11 @@ const ContentCS: React.FC<ContentCSProps> = ({ btn_type, user_name }) => {
                             <Typography color="textSecondary">
                                 Status: {app.eventStatus}
                             </Typography>
+                            {app.financialComment && (
+                                <Typography variant="body2" color="textSecondary">
+                                    Financial comment: {app.financialComment}
+                                </Typography>
+                            )}
                         </CardContent>
                     </Card>
                 ))

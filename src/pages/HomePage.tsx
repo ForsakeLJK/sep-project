@@ -16,6 +16,7 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import ContentCS from '../components/ContentCS';
 import ContentRev from '../components/ContentRev';
+import ContentFM from '../components/ContentFM';
 
 const drawerWidth = 240;
 
@@ -45,7 +46,7 @@ const HomePage: React.FC = () => {
                 return;
             case 'FM':
                 if (btnHit === 'applications') {
-                    return <ContentRev btn_type={btnHit} user_name={logname} />;
+                    return <ContentFM btn_type={btnHit} user_name={logname} />;
                 }
                 return;
             case 'HR':
