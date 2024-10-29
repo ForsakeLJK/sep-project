@@ -20,6 +20,7 @@ import ContentFM from '../components/ContentFM';
 import ContentPM from '../components/ContentPM';
 import ContentSub from '../components/ContentSub';
 import ContentBudgetPM from '../components/ContentBudgetPM';
+import ContentBudgetFM from '../components/ContentBudgetFM';
 
 const drawerWidth = 240;
 
@@ -56,6 +57,8 @@ const HomePage: React.FC = () => {
             case 'FM':
                 if (btnHit === 'applications') {
                     return <ContentFM btn_type={btnHit} user_name={logname} />;
+                } else if (btnHit === 'budget requests') {
+                    return <ContentBudgetFM btn_type={btnHit} user_name={logname} />;
                 }
                 return;
             case 'HR':
@@ -151,7 +154,7 @@ const HomePage: React.FC = () => {
                             </ListItemButton>
                         </ListItem>
                         <ListItem disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={() => handleButtonClick('budget requests')}>
                                 <ListItemIcon>
                                     <InboxIcon />
                                 </ListItemIcon>
