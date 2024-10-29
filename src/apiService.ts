@@ -15,6 +15,9 @@ export const fetchDataByButtonType = async (btnType: string | null, username: st
             case 'budget requests':
                 endpoint = 'budgetReqList';
                 break;
+            case 'resource requests':
+                endpoint = 'resourceReqList';
+                break;
         default:
             throw new Error('Invalid button type');
     }
