@@ -42,7 +42,12 @@ const HomePage: React.FC = () => {
             case 'SCS':
                 return <ContentRev btn_type={btnHit} user_name={logname} />;
             case 'PM':
+                return;
             case 'FM':
+                if (btnHit === 'applications') {
+                    return <ContentRev btn_type={btnHit} user_name={logname} />;
+                }
+                return;
             case 'HR':
                 return;
         }
@@ -53,11 +58,10 @@ const HomePage: React.FC = () => {
             case 'CS':
             case 'AM':
             case 'SCS':
-                setBtnHit(btn_type);
-                return;
             case 'PM':
             case 'FM':
             case 'HR':
+                setBtnHit(btn_type);
                 return;
         }
     };
@@ -124,7 +128,7 @@ const HomePage: React.FC = () => {
                 return (
                     <List>
                         <ListItem disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={() => handleButtonClick('applications')}>
                                 <ListItemIcon>
                                     <InboxIcon />
                                 </ListItemIcon>
