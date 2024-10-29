@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Card, CardContent, Button, Snackbar, Alert } from '@mui/material';
+import { Typography, Card, CardContent, Button, Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import { fetchDataByButtonType, postData } from '../apiService';
 
 interface SepReqVO {
@@ -20,6 +20,9 @@ const ContentResourceHR: React.FC<ContentResourceHRProps> = ({ btn_type, user_na
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [newEmployeeName, setNewEmployeeName] = useState('');
+    const [newDepartment, setNewDepartment] = useState('');
 
     useEffect(() => {
         fetchRequests();
@@ -49,6 +52,34 @@ const ContentResourceHR: React.FC<ContentResourceHRProps> = ({ btn_type, user_na
         }
 
         setSnackbarOpen(true);
+    };
+
+    const handleDialogOpen = () => {
+        setDialogOpen(true);
+    };
+
+    const handleDialogClose = () => {
+        setDialogOpen(false);
+        setNewEmployeeName('');
+        setNewDepartment('');
+    };
+
+    const handleRecruitEmployee = async () => {
+        const response = await postData('recruitEmp', {
+            name: newEmployeeName,
+            department: newDepartment,
+        });
+
+        if (response.recruitSuccess) {
+            setSnackbarMessage('Employee recruited successfully!');
+            setSnackbarSeverity('success');
+        } else {
+            setSnackbarMessage('Failed to recruit employee.');
+            setSnackbarSeverity('error');
+        }
+
+        setSnackbarOpen(true);
+        handleDialogClose();
     };
 
     return (
@@ -91,6 +122,41 @@ const ContentResourceHR: React.FC<ContentResourceHRProps> = ({ btn_type, user_na
                     </Card>
                 ))
             )}
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={handleDialogOpen}
+                style={{ position: 'fixed', bottom: '20px', right: '20px' }}
+            >
+                Recruit Employee
+            </Button>
+            <Dialog open={dialogOpen} onClose={handleDialogClose}>
+                <DialogTitle>Recruit Employee</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        label="Employee Name"
+                        fullWidth
+                        margin="normal"
+                        value={newEmployeeName}
+                        onChange={(e) => setNewEmployeeName(e.target.value)}
+                    />
+                    <TextField
+                        label="Department"
+                        fullWidth
+                        margin="normal"
+                        value={newDepartment}
+                        onChange={(e) => setNewDepartment(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDialogClose} color="secondary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleRecruitEmployee} color="primary">
+                        Submit
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
                 <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity}>
                     {snackbarMessage}
