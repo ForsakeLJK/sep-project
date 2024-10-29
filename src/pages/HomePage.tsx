@@ -18,6 +18,7 @@ import ContentCS from '../components/ContentCS';
 import ContentRev from '../components/ContentRev';
 import ContentFM from '../components/ContentFM';
 import ContentPM from '../components/ContentPM';
+import ContentSub from '../components/ContentSub';
 
 const drawerWidth = 240;
 
@@ -56,6 +57,8 @@ const HomePage: React.FC = () => {
                 return;
             case 'HR':
                 return;
+            case 'Sub':
+                return <ContentSub btn_type={btnHit} user_name={logname} />;
         }
     };
 
@@ -68,6 +71,7 @@ const HomePage: React.FC = () => {
             case 'SM':
             case 'FM':
             case 'HR':
+            case 'Sub':
                 setBtnHit(btn_type);
                 return;
         }
@@ -170,6 +174,19 @@ const HomePage: React.FC = () => {
                                     <InboxIcon />
                                 </ListItemIcon>
                                 <ListItemText primary='job posts' />
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
+                );
+            case 'Sub':
+                return (
+                    <List>
+                        <ListItem disablePadding>
+                            <ListItemButton onClick={() => handleButtonClick('tasks')}>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                </ListItemIcon>
+                                <ListItemText primary='tasks' />
                             </ListItemButton>
                         </ListItem>
                     </List>

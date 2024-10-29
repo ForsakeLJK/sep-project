@@ -130,7 +130,7 @@ const ContentPM: React.FC<ContentPMProps> = ({ btn_type, user_name }) => {
 
     return (
         <div style={{ position: 'relative', minHeight: '100vh', paddingBottom: '60px' }}>
-            <Typography variant="h4">Project Manager Applications</Typography>
+            <Typography variant="h4">Event Applications</Typography>
             {applications.length === 0 ? (
                 <Typography>No applications yet</Typography>
             ) : (
