@@ -16,6 +16,26 @@ export const fetchDataByButtonType = async (btnType: string | null, username: st
     return fetchData(endpoint, username);
 };
 
+export const fetchEmpData = async (endpoint: string, username: string | null, applicationId: string): Promise<any> => {
+    try {
+        if (!username) {
+            throw new Error('null username');
+        }
+
+        const url = `${API_BASE_URL}/${endpoint}?username=${encodeURIComponent(username)}&applicationId=${encodeURIComponent(applicationId)}`;
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error;
+    }
+};
+
 const fetchData = async (endpoint: string, username: string | null): Promise<any> => {
     try {
         if (!username) {

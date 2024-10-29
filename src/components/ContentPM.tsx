@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Card, CardContent, Button, Snackbar, Alert, Popover, TextField, MenuItem, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import { fetchDataByButtonType, postData } from '../apiService';
+import { fetchDataByButtonType, fetchEmpData, postData } from '../apiService';
 
 interface ApplicationVO {
     applicationId: string;
@@ -10,6 +10,7 @@ interface ApplicationVO {
     needReview: boolean;
     showSetStatus: boolean;
     nextStatus: string;
+    financialComment: string;
 }
 
 interface EmpVO {
@@ -57,7 +58,7 @@ const ContentPM: React.FC<ContentPMProps> = ({ btn_type, user_name }) => {
 
     const handleAssignTaskOpen = async (event: React.MouseEvent<HTMLButtonElement>, applicationId: string) => {
         setAnchorEl(event.currentTarget);
-        const response = await postData('/employee', { applicationId, username: user_name });
+        const response = await fetchEmpData('employee', user_name, applicationId);
         setEmployees(response.empList || []);
     };
 
@@ -133,27 +134,31 @@ const ContentPM: React.FC<ContentPMProps> = ({ btn_type, user_name }) => {
                     <Card key={app.applicationId} style={{ margin: '10px 0' }}>
                         <CardContent>
                             <Typography variant="h5">{app.eventName}</Typography>
-                            <Typography color="textSecondary">{app.applicationId}</Typography>
+                            <Typography color="textSecondary">Application ID: {app.applicationId}</Typography>
                             <Typography variant="body2" color="textSecondary">
                                 Status: {app.eventStatus}
                             </Typography>
                             <div>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={(e) => handleAssignTaskOpen(e, app.applicationId)}
-                                    style={{ marginRight: '10px' }}
-                                >
-                                    Assign Task
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={() => handleViewTasksOpen(app.applicationId)}
-                                    style={{ marginRight: '10px' }}
-                                >
-                                    View Tasks
-                                </Button>
+                                {(app.eventStatus === 'open' || app.eventStatus === 'in progress') && (
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={(e) => handleAssignTaskOpen(e, app.applicationId)}
+                                        style={{ marginRight: '10px' }}
+                                    >
+                                        Assign Task
+                                    </Button>
+                                )}
+                                {(app.eventStatus === 'open' || app.eventStatus === 'in progress') && (
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => handleViewTasksOpen(app.applicationId)}
+                                        style={{ marginRight: '10px' }}
+                                    >
+                                        View Tasks
+                                    </Button>
+                                )}
                                 {app.eventStatus === 'open' && (
                                     <Button
                                         variant="contained"
