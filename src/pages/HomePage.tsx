@@ -11,9 +11,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import React, { useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { fetchData } from '../apiService';
+import React, { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import ContentCS from '../components/ContentCS';
 
@@ -26,16 +25,12 @@ const drawerWidth = 240;
 
 const HomePage: React.FC = () => {
 
-    const [content, setContent] = useState<Content | null>(null);
+    const [btnHit, setBtnHit] = useState<string | null>(null);
 
     const { userRole, logname } = useAuth();
 
     const renderContent = () => {
-        if (content?.error) {
-            return <Typography>{content.error}</Typography>;
-        }
-
-        if (!content) {
+        if (!btnHit) {
             return (
                 <div>
                     <Typography><h1>Hello {logname}!</h1></Typography>
@@ -46,16 +41,20 @@ const HomePage: React.FC = () => {
 
         switch (userRole) {
             case 'CS':
-                return <ContentCS data={content.data} />;
-            default:
-                return null;
+                return <ContentCS btn_type={btnHit} user_name={logname} />;
+            case 'AM':
+            case 'SCS':
+            case 'PM':
+            case 'FM':
+            case 'HR':
+                return;
         }
     };
 
-    const handleButtonClick = async () => {
+    const handleButtonClick = async (btn_type: string) => {
         switch (userRole) {
             case 'CS':
-                setContent({ data: { title: 'test_title', description: 'test_desc' } });
+                setBtnHit(btn_type);
                 return;
             case 'AM':
             case 'SCS':
@@ -64,12 +63,6 @@ const HomePage: React.FC = () => {
             case 'HR':
                 return;
         }
-        // try {
-        //     const data = await fetchData(endpoint);
-        //     setContent({ data: data, contentType: contentType });
-        // } catch (error) {
-        //     setContent({ error: 'Error fetching data' });
-        // }
     };
 
     const renderButtons = () => {
@@ -78,7 +71,7 @@ const HomePage: React.FC = () => {
                 return (
                     <List>
                         <ListItem disablePadding>
-                            <ListItemButton onClick={() => handleButtonClick()}>
+                            <ListItemButton onClick={() => handleButtonClick('applications')}>
                                 <ListItemIcon>
                                     <InboxIcon />
                                 </ListItemIcon>

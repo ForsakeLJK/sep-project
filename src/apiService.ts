@@ -2,12 +2,33 @@
 
 const API_BASE_URL = 'http://localhost:8080/sep';
 
-export const fetchData = async (endpoint: string): Promise<any> => {
+export const fetchDataByButtonType = async (btnType: string | null, username: string | null): Promise<any> => {
+    let endpoint = '';
+
+    switch (btnType) {
+        case 'applications':
+            endpoint = 'applications';
+            break;
+        default:
+            throw new Error('Invalid button type');
+    }
+
+    return fetchData(endpoint, username);
+};
+
+const fetchData = async (endpoint: string, username: string | null): Promise<any> => {
     try {
-        const response = await fetch(`${API_BASE_URL}/${endpoint}`);
+        if (!username) {
+            throw new Error('null username');
+        }
+
+        const url = `${API_BASE_URL}/${endpoint}?username=${encodeURIComponent(username)}`;
+        const response = await fetch(url);
+
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
+
         return await response.json();
     } catch (error) {
         console.error('Fetch error:', error);
