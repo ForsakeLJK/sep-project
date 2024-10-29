@@ -3,7 +3,7 @@ import { Typography, Card, CardContent, Button, Dialog, DialogTitle, DialogConte
 import { fetchDataByButtonType, postData } from '../apiService';
 
 interface ApplicationVO {
-    applicationId: number;
+    applicationId: string;
     eventName: string;
     eventDesc: string;
     eventStatus: string;

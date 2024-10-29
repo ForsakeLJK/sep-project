@@ -15,11 +15,7 @@ import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import ContentCS from '../components/ContentCS';
-
-interface Content {
-    data?: Record<string, any>;
-    error?: string;
-}
+import ContentRev from '../components/ContentRev';
 
 const drawerWidth = 240;
 
@@ -44,6 +40,7 @@ const HomePage: React.FC = () => {
                 return <ContentCS btn_type={btnHit} user_name={logname} />;
             case 'AM':
             case 'SCS':
+                return <ContentRev btn_type={btnHit} user_name={logname} />;
             case 'PM':
             case 'FM':
             case 'HR':
@@ -54,10 +51,10 @@ const HomePage: React.FC = () => {
     const handleButtonClick = async (btn_type: string) => {
         switch (userRole) {
             case 'CS':
-                setBtnHit(btn_type);
-                return;
             case 'AM':
             case 'SCS':
+                setBtnHit(btn_type);
+                return;
             case 'PM':
             case 'FM':
             case 'HR':
@@ -85,7 +82,7 @@ const HomePage: React.FC = () => {
                 return (
                     <List>
                         <ListItem disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={() => handleButtonClick('applications')}>
                                 <ListItemIcon>
                                     <InboxIcon />
                                 </ListItemIcon>
