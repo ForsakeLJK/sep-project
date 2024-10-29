@@ -44,6 +44,7 @@ const ContentPM: React.FC<ContentPMProps> = ({ btn_type, user_name }) => {
     const [taskDesc, setTaskDesc] = useState('');
     const [tasks, setTasks] = useState<TaskVO[]>([]);
     const [taskPopoverOpen, setTaskPopoverOpen] = useState(false);
+    const [currentApplicationId, setCurrentApplicationId] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -60,6 +61,7 @@ const ContentPM: React.FC<ContentPMProps> = ({ btn_type, user_name }) => {
         setAnchorEl(event.currentTarget);
         const response = await fetchEmpData('employee', user_name, applicationId);
         setEmployees(response.empList || []);
+        setCurrentApplicationId(applicationId);
     };
 
     const handleAssignTaskClose = () => {
@@ -68,17 +70,19 @@ const ContentPM: React.FC<ContentPMProps> = ({ btn_type, user_name }) => {
         setEmployeeName('');
         setTaskName('');
         setTaskDesc('');
+        setCurrentApplicationId(null);
     };
 
-    const handleTaskSubmit = async () => {
-        const response = await postData('/taskAssign', {
+    const handleTaskSubmit = async (applicationId: string | null) => {
+        const response = await postData('taskAssign', {
             username: user_name,
             taskName,
             taskDesc,
             employeeName,
+            applicationId
         });
 
-        if (response.success) {
+        if (response.assignSuccess) {
             setSnackbarMessage('Task assigned successfully!');
             setSnackbarSeverity('success');
         } else {
@@ -239,7 +243,7 @@ const ContentPM: React.FC<ContentPMProps> = ({ btn_type, user_name }) => {
                                 </MenuItem>
                             ))}
                     </TextField>
-                    <Button variant="contained" color="primary" onClick={handleTaskSubmit}>
+                    <Button variant="contained" color="primary" onClick={() => handleTaskSubmit(currentApplicationId)}>
                         Submit
                     </Button>
                 </div>
