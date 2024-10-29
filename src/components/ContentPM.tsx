@@ -106,9 +106,9 @@ const ContentPM: React.FC<ContentPMProps> = ({ btn_type, user_name }) => {
     };
 
     const handleChangeStatus = async (applicationId: string, newStatus: string) => {
-        const response = await postData('/changeStatus', { username: user_name, applicationId });
+        const response = await postData('changeStatus', { username: user_name, applicationId });
 
-        if (response.success) {
+        if (response.changeSuccess) {
             setSnackbarMessage(`Status changed to ${newStatus} successfully!`);
             setSnackbarSeverity('success');
             const data = await fetchDataByButtonType(btn_type, user_name);
