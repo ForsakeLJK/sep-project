@@ -17,6 +17,7 @@ import { useAuth } from '../AuthContext';
 import ContentCS from '../components/ContentCS';
 import ContentRev from '../components/ContentRev';
 import ContentFM from '../components/ContentFM';
+import ContentPM from '../components/ContentPM';
 
 const drawerWidth = 240;
 
@@ -43,6 +44,10 @@ const HomePage: React.FC = () => {
             case 'SCS':
                 return <ContentRev btn_type={btnHit} user_name={logname} />;
             case 'PM':
+            case 'SM':
+                if (btnHit === 'applications') {
+                    return <ContentPM btn_type={btnHit} user_name={logname} />;
+                }
                 return;
             case 'FM':
                 if (btnHit === 'applications') {
@@ -60,6 +65,7 @@ const HomePage: React.FC = () => {
             case 'AM':
             case 'SCS':
             case 'PM':
+            case 'SM':
             case 'FM':
             case 'HR':
                 setBtnHit(btn_type);
@@ -97,10 +103,11 @@ const HomePage: React.FC = () => {
                     </List>
                 );
             case 'PM':
+            case 'SM':
                 return (
                     <List>
                         <ListItem disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={() => handleButtonClick('applications')}>
                                 <ListItemIcon>
                                     <InboxIcon />
                                 </ListItemIcon>
