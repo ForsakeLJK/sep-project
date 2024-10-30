@@ -52,9 +52,9 @@ const HomePage: React.FC = () => {
             case 'SM':
                 if (btnHit === 'applications') {
                     return <ContentPM btn_type={btnHit} user_name={logname} />;
-                } else if (btnHit == 'budget requests') {
+                } else if (btnHit === 'budget requests') {
                     return <ContentBudgetPM btn_type={btnHit} user_name={logname} />;
-                } else if (btnHit == 'resource requests') {
+                } else if (btnHit === 'resource requests') {
                     return <ContentResourcePM btn_type={btnHit} user_name={logname} />;
                 }
                 return;
