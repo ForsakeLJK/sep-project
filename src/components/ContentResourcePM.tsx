@@ -94,7 +94,7 @@ const ContentResourcePM: React.FC<ContentResourcePMProps> = ({ btn_type, user_na
                 variant="contained"
                 color="primary"
                 onClick={handleDialogOpen}
-                style={{ position: 'fixed', bottom: '20px', right: '20px' }}
+                style={{ position: 'fixed', bottom: '20px', left: '50%' }}
             >
                 Create Resource Request
             </Button>
@@ -134,7 +134,11 @@ const ContentResourcePM: React.FC<ContentResourcePMProps> = ({ btn_type, user_na
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
+            <Snackbar anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+            }}
+                open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
                 <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity}>
                     {snackbarMessage}
                 </Alert>

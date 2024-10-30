@@ -98,7 +98,11 @@ const ContentRev: React.FC<ContentRevProps> = ({ btn_type, user_name }) => {
                     </Card>
                 ))
             )}
-            <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+            <Snackbar anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+            }}
+                open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
                 <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
                     {snackbarMessage}
                 </Alert>

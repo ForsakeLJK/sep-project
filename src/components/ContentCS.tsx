@@ -129,7 +129,11 @@ const ContentCS: React.FC<ContentCSProps> = ({ btn_type, user_name }) => {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
+            <Snackbar anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+            }}
+                open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
                 <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
                     {snackbarMessage}
                 </Alert>

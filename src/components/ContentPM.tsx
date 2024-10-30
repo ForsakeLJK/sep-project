@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Card, CardContent, Button, Snackbar, Alert, Popover, TextField, MenuItem, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Typography, Card, CardContent, Button, Snackbar, Alert, Popover, TextField, MenuItem, Table, TableBody, TableCell, TableHead, TableRow, Dialog } from '@mui/material';
 import { fetchDataByButtonType, fetchDataWithAppId, postData } from '../apiService';
 
 interface ApplicationVO {
@@ -248,13 +248,9 @@ const ContentPM: React.FC<ContentPMProps> = ({ btn_type, user_name }) => {
                     </Button>
                 </div>
             </Popover>
-            <Popover
+            <Dialog
                 open={taskPopoverOpen}
                 onClose={handleTaskPopoverClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                }}
             >
                 <div style={{ padding: '20px', maxWidth: '600px' }}>
                     <Typography variant="h6">Tasks</Typography>
@@ -279,8 +275,12 @@ const ContentPM: React.FC<ContentPMProps> = ({ btn_type, user_name }) => {
                         </TableBody>
                     </Table>
                 </div>
-            </Popover>
-            <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
+            </Dialog>
+            <Snackbar anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+            }}
+                open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
                 <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity}>
                     {snackbarMessage}
                 </Alert>

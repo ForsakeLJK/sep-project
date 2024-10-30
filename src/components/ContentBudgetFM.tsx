@@ -91,7 +91,11 @@ const ContentBudgetFM: React.FC<ContentBudgetFMProps> = ({ btn_type, user_name }
                     </Card>
                 ))
             )}
-            <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
+            <Snackbar anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+            }}
+                open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
                 <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity}>
                     {snackbarMessage}
                 </Alert>

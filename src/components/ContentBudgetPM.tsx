@@ -94,7 +94,7 @@ const ContentBudgetPM: React.FC<ContentBudgetPMProps> = ({ btn_type, user_name }
                 variant="contained"
                 color="primary"
                 onClick={handleDialogOpen}
-                style={{ position: 'fixed', bottom: '20px', right: '20px' }}
+                style={{ position: 'fixed', bottom: '20px', left: '50%' }}
             >
                 Create Budget Request
             </Button>
@@ -134,7 +134,11 @@ const ContentBudgetPM: React.FC<ContentBudgetPMProps> = ({ btn_type, user_name }
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
+            <Snackbar anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+            }}
+                open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
                 <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity}>
                     {snackbarMessage}
                 </Alert>
